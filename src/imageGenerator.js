@@ -175,8 +175,8 @@ export async function generateQuoteImage({ id, avatarUrl, content, authorName, d
   ctx.font = '15px "NanumMyeongjo-Bold", "NanumMyeongjo", "Georgia", "serif"';
   ctx.fillStyle = '#c5a880'; // 시그니처 골드
   
-  // 형식: [- 이름 (YYYY. MM. DD), 상황]
-  const signatureText = `[- ${authorName} (${dateStr}), ${contextStr}]`;
+  // 형식: [- 이름 (YYYY. MM. DD)]
+  const signatureText = `[- ${authorName} (${dateStr})]`;
   
   // 하단 장식선
   const sigY = 410;

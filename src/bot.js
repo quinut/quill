@@ -83,48 +83,8 @@ export function initBot() {
 
     console.log(`📝 명언 후보 감지: "${messageContent}" by ${message.author.tag}`);
 
-    // 맥락(상황) 수집 단계
-    let contextStr = '단톡방에서 잡담을 나누며';
-    
     try {
-      // 1. 안내 메시지 전송
-      const promptMsg = await message.reply({
-        content: `🏛️ **'아웃 오브 콘텍스트' 명언 짤 제조기**\n${user}님, 이 명언이 탄생하게 된 **당시 상황(맥락)**을 1분 내에 짧은 텍스트로 답장해 주세요!\n*(예: 치킨을 시키며, 게임에서 지고 나서)*\n*(아무것도 입력하지 않거나 1분이 지나면 기본값으로 기록됩니다.)*`
-      });
-
-      // 2. Message Collector 생성 (반응을 단 사용자의 다음 입력 대기)
-      const filter = m => m.author.id === user.id;
-      const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
-
-      await new Promise((resolve) => {
-        collector.on('collect', async (collectedMsg) => {
-          const answer = collectedMsg.content?.trim();
-          if (answer) {
-            contextStr = answer;
-            // "치킨을 시키며 했던 말" 처럼 조사를 붙여 명언집스럽게 다듬어줍니다.
-            if (!contextStr.endsWith('말') && !contextStr.endsWith('때') && !contextStr.endsWith('에서') && !contextStr.endsWith('하며')) {
-              contextStr = `${contextStr} 했던 말`;
-            }
-          }
-          
-          // 사용자가 남긴 응답 메시지 삭제 (대화창을 깨끗하게 유지하기 위해)
-          try {
-            await collectedMsg.delete();
-          } catch (e) {
-            // 권한 부족 등으로 실패해도 진행
-          }
-          resolve();
-        });
-
-        collector.on('end', () => {
-          resolve();
-        });
-      });
-
-      // 3. 안내 프롬프트 메시지 수정 (진행 중 표시)
-      await promptMsg.edit({ content: '🎨 명언 이미지를 최고급 퀄리티로 제조하는 중입니다...' });
-
-      // 4. 이미지 생성 매개변수 준비
+      // 1. 이미지 생성 매개변수 준비
       const id = crypto.randomUUID();
       const authorName = message.member?.displayName || message.author.username;
       const avatarUrl = message.author.displayAvatarURL({ extension: 'png', size: 256 });
@@ -136,43 +96,36 @@ export function initBot() {
       const dd = String(date.getDate()).padStart(2, '0');
       const dateStr = `${yyyy}. ${mm}. ${dd}`;
 
-      // 5. 이미지 생성 실행
+      // 2. 이미지 생성 실행
       const relativeImagePath = await generateQuoteImage({
         id,
         avatarUrl,
         content: messageContent,
         authorName,
         dateStr,
-        contextStr
+        contextStr: '' // 상황 맥락 제외
       });
 
-      // 6. DB 저장
+      // 3. DB 저장
       saveQuote({
         id,
         messageId: message.id,
         authorName,
         authorAvatarUrl: avatarUrl,
         content: messageContent,
-        context: contextStr,
+        context: null, // 상황 맥락 제외
         imagePath: relativeImagePath,
         guildId: message.guildId,
         guildName: message.guild?.name || 'DM'
       });
 
-      // 7. 채널에 명언 업로드
+      // 4. 채널에 명언 업로드
       const imageFullPath = path.resolve('public', relativeImagePath.replace(/^\//, ''));
       const attachment = new AttachmentBuilder(imageFullPath, { name: `${id}.png` });
 
-      // 박제 완료 메시지 전송
-      try {
-        await promptMsg.delete(); // 안내 메시지 삭제
-      } catch (e) {
-        console.warn('⚠️ 안내 메시지 삭제 실패 (무시됨):', e.message);
-      }
-
       const museumLink = 'https://quill.quinut.xyz/'; // 명언 박물관 호스팅 링크
       await message.reply({
-        content: `✨ **역사적인 명언이 탄생했습니다!**\n[- ${authorName} (${dateStr}), ${contextStr}]\n\n🏛️ 전체 명언은 [명언 박물관](${museumLink})에서 감상하실 수 있습니다.`,
+        content: `✨ **역사적인 명언이 탄생했습니다!**\n[- ${authorName} (${dateStr})]\n\n🏛️ 전체 명언은 [명언 박물관](${museumLink})에서 감상하실 수 있습니다.`,
         files: [attachment]
       });
 

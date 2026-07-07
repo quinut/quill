@@ -19,7 +19,6 @@ const modalAuthorName = document.getElementById('modal-author-name');
 const modalServerName = document.getElementById('modal-server-name');
 const modalQuoteText = document.getElementById('modal-quote-text');
 const modalDate = document.getElementById('modal-date');
-const modalContext = document.getElementById('modal-context');
 const downloadBtn = document.getElementById('download-btn');
 const copyLinkBtn = document.getElementById('copy-link-btn');
 
@@ -83,7 +82,6 @@ function renderQuotes(quotes) {
         </div>
         <p class="card-quote-preview">“ ${quote.content} ”</p>
         <div class="card-meta">
-          <span class="card-context">${quote.context || '단톡방에서'}</span>
           <span>${dateDisplay}</span>
         </div>
       </div>
@@ -140,7 +138,6 @@ function openModal(quote) {
   
   const dateDisplay = quote.created_at ? quote.created_at.substring(0, 10).replace(/-/g, '. ') : '';
   modalDate.textContent = dateDisplay;
-  modalContext.textContent = quote.context || '단톡방에서 했던 말';
   
   // 다운로드 및 복사 버튼 설정
   downloadBtn.href = quote.image_path;
