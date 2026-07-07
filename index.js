@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { initDb } from './src/db.js';
 import { initBot } from './src/bot.js';
 import { initServer } from './src/server.js';
@@ -13,6 +15,16 @@ process.on('unhandledRejection', (reason, promise) => {
 
 async function main() {
   console.log('🏛️  Starting Out of Context Quote Bot & Museum...');
+
+  // 필수 디렉토리 확인 및 생성 (Git 클론 시 폴더 유실 방지)
+  const requiredDirs = ['data', 'fonts', 'public/quotes'];
+  requiredDirs.forEach(dir => {
+    const dirPath = path.resolve(dir);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+      console.log(`📁 생성됨 (유실 디렉토리): ${dir}`);
+    }
+  });
 
   // 1. 데이터베이스 초기화
   try {
