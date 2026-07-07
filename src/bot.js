@@ -170,7 +170,7 @@ export function initBot() {
         console.warn('⚠️ 안내 메시지 삭제 실패 (무시됨):', e.message);
       }
 
-      const museumLink = `http://localhost:${config.port}/`; // 로컬 museum 호스트 링크
+      const museumLink = 'https://quill.quinut.xyz/'; // 명언 박물관 호스팅 링크
       await message.reply({
         content: `✨ **역사적인 명언이 탄생했습니다!**\n[- ${authorName} (${dateStr}), ${contextStr}]\n\n🏛️ 전체 명언은 [명언 박물관](${museumLink})에서 감상하실 수 있습니다.`,
         files: [attachment]
