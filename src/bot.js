@@ -164,7 +164,11 @@ export function initBot() {
       const attachment = new AttachmentBuilder(imageFullPath, { name: `${id}.png` });
 
       // 박제 완료 메시지 전송
-      await promptMsg.delete(); // 안내 메시지 삭제
+      try {
+        await promptMsg.delete(); // 안내 메시지 삭제
+      } catch (e) {
+        console.warn('⚠️ 안내 메시지 삭제 실패 (무시됨):', e.message);
+      }
 
       const museumLink = `http://localhost:${config.port}/`; // 로컬 museum 호스트 링크
       await message.reply({
