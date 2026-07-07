@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아웃 오브 콘텍스트 명언 박물관</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Outfit (English text/numbers), Nanum Myeongjo & Inter (Korean text) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Nanum+Myeongjo:wght@400;700;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <i class="fa-solid fa-building-columns gold-text"></i>
+        <h1>Out of Context <span class="gold-gradient">Museum</span></h1>
+      </div>
+      <p class="subtitle">친구들의 헛소리(?)를 한눈에 감상하는 위인 명언 갤러리</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 검색 및 필터 패널 -->
+    <section class="controls-panel card">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="search-input" placeholder="내용, 작성자 또는 상황 검색..." autocomplete="off">
+      </div>
+      
+      <div class="filter-box">
+        <i class="fa-solid fa-server filter-icon"></i>
+        <select id="server-filter">
+          <option value="">모든 디스코드 서버</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- 명언 카드 그리드 -->
+    <section class="gallery-section">
+      <div class="gallery-header">
+        <h2 id="gallery-title">모든 소장품</h2>
+        <span class="count-badge" id="quote-count">0개 소장</span>
+      </div>
+      
+      <div id="quotes-grid" class="quotes-grid">
+        <!-- JS로 동적 생성됨 -->
+        <div class="loading-state">
+          <i class="fa-solid fa-circle-notch fa-spin spinner"></i>
+          <p>전시품을 정리하고 있습니다...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <p>© 2026 Out of Context Museum. All rights reserved.</p>
+      <p class="bot-info"><i class="fa-brands fa-discord"></i> 이모지 🏛️ 또는 📝를 달아 실시간으로 박제해보세요!</p>
+    </div>
+  </footer>
+
+  <!-- 이미지 상세 정보 모달 -->
+  <div id="quote-modal" class="modal">
+    <span class="modal-close" id="modal-close-btn">&times;</span>
+    <div class="modal-content-wrapper">
+      <div class="modal-image-container">
+        <img id="modal-img" src="" alt="명언 이미지 원본">
+      </div>
+      <div class="modal-info-panel">
+        <div class="modal-author-info">
+          <img id="modal-author-avatar" src="" alt="작성자 아바타" class="author-avatar">
+          <div>
+            <h3 id="modal-author-name">작성자</h3>
+            <span id="modal-server-name" class="server-tag">서버 이름</span>
+          </div>
+        </div>
+        <blockquote id="modal-quote-text">"명언 본문"</blockquote>
+        <div class="modal-meta">
+          <span class="meta-item"><i class="fa-solid fa-calendar"></i> <span id="modal-date">2026. 07. 07</span></span>
+          <span class="meta-item"><i class="fa-solid fa-quote-left"></i> <span id="modal-context">상황</span></span>
+        </div>
+        <div class="modal-actions">
+          <a id="download-btn" href="#" download class="btn btn-primary"><i class="fa-solid fa-download"></i> 다운로드</a>
+          <button id="copy-link-btn" class="btn btn-secondary"><i class="fa-solid fa-link"></i> 링크 복사</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
