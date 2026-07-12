@@ -4,7 +4,6 @@ import path from 'path';
 import { config } from './config.js';
 import { saveQuote, getQuoteByMessageId } from './db.js';
 import { generateQuoteImage } from './imageGenerator.js';
-import { initMissions } from './mission.js';
 
 let client;
 
@@ -27,9 +26,6 @@ export function initBot() {
       Partials.User
     ]
   });
-
-  // 미션 시스템 연동
-  initMissions(client);
 
   client.once('ready', () => {
     console.log(`🤖 Discord Bot logged in as ${client.user.tag}`);
